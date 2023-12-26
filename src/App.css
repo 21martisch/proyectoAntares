@@ -1,38 +1,113 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Lato', sans-serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.home,
+.proyecto {
+    display: flex;
+    height: 90vh;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.modal {
+    display: block;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
   }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
   }
-  to {
-    transform: rotate(360deg);
+  
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
   }
-}
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .lista-sin-puntos {
+    list-style-type: none;
+  }
+  .contenedor {
+    display: flex;
+    align-items: center; /* Centra verticalmente los elementos */
+    margin-top: 50px;
+    margin-left: 20px;
+  }
+  
+  h4 {
+    margin-right: 10px; /* Espacio entre el título y el botón */
+  }
+  
+  .card-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 100px;
+  }
+  
+  .card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin: 20px;
+    width: 300px;
+    height: 380px;
+    background-color: #f0f0f0;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .card img{
+    width: 100%;
+    height: 50%;
+  }
+  .card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Cambia la sombra en el hover */
+  }
+  .card-content{
+    padding: 16px;
+  }
+  .card-content h3{
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+  .card-content .btn{
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #333;
+    border-radius: 4px;
+    margin-top: 40px;
+    color: #fff;
+  }
+  .custom-table{
+    background-color: #888;
+    color: #fff;
+  }
+  .mi-dropdown-menu {
+    background-color: #f8f9fa; /* Color de fondo */
+    border: 1px solid #dee2e6; /* Borde */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra */
+    padding: 40px; /* Espaciado interno */
+  }
