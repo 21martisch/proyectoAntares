@@ -41,7 +41,6 @@ function Etapa(){
     }, []);
     const agregarNuevaEtapa = async () => {
         try {
-            // Verifica que nombreEtapa no esté vacío antes de hacer la solicitud
             if (nombreEtapa.trim() === '') {
             console.log('El campo de entrada está vacío. No se agregará la etapa.');
             return;
@@ -54,10 +53,8 @@ function Etapa(){
         
             console.log('Respuesta:', response.data);
         
-            // Limpia el campo de entrada después de agregar la etapa
             setNombreEtapa('');
         
-            // Deshabilita el botón después de agregar la etapa
             setBotonDeshabilitado(true);
         } catch (error) {
             console.error('Error al agregar etapa', error);

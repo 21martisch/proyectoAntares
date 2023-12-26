@@ -64,7 +64,6 @@ function Type(){
         const nuevoValor = event.target.value;
         setNombreType(nuevoValor);
     
-        // Habilita el botón si hay algo en el campo de entrada, de lo contrario, deshabilítalo
         setBotonDeshabilitado6(!nuevoValor.trim());
     };
     const handleVolver = () => {

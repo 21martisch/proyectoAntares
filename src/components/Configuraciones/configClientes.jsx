@@ -22,10 +22,8 @@ function Cliente(){
     };
 
     const toggleClienteCheckbox = async (clienteId) => {
-        // Obten el estado actual del cliente (si existe) o inicialízalo a false
         const currentClienteState = selectedClientes[clienteId] || false;
     
-        // Actualiza el estado en el objeto de clientes seleccionados
         const newSelectedClientes = {
         ...selectedClientes,
         [clienteId]: !currentClienteState,
@@ -33,7 +31,6 @@ function Cliente(){
         setSelectedClientes(newSelectedClientes);
     
         try {
-        // Construye la URL con el estado actualizado del cliente
         const estadoCliente = newSelectedClientes[clienteId] ? 'activar' : 'desactivar';
         await axios.put(`https://localhost:7126/api/Proyecto/${clienteId}/${estadoCliente}`);
         } catch (error) {
@@ -60,7 +57,6 @@ function Cliente(){
         const nuevoValor = event.target.value;
         setNombre(nuevoValor);
     
-        // Habilita el botón si hay algo en el campo de entrada, de lo contrario, deshabilítalo
         setBotonDeshabilitado2(!nuevoValor.trim());
     };
     
@@ -71,11 +67,10 @@ function Cliente(){
     const obtenerClientes = async () => {
         try {
         const response = await axios.get('https://localhost:7126/api/Proyecto/GetCliente');
-        // Mapear clientes y configurar el estado inicial de los checkboxes
         const initialSelectedClientes = response.data.reduce(
             (acc, cliente) => ({
             ...acc,
-            [cliente.clienteId]: cliente.estado // Asumimos que el estado de cliente está en la propiedad "estado"
+            [cliente.clienteId]: cliente.estado 
             
             }),
             {}
@@ -90,7 +85,6 @@ function Cliente(){
     };
 
     const handleVolver = () => {
-        // Utiliza la función goBack() para retroceder una página en la historia del navegador.
         navigate('/Config');
     };
 

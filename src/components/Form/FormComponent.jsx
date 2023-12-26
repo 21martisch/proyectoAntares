@@ -35,13 +35,12 @@ function FormComponent(){
     const [selectedArea, setSelectedArea] = useState('');
     const [selectedAreaId, setSelectedAreaId] = useState(null); 
     
-
     useEffect(() => {
         const obtenerClientes = async () => {
             try {
                 const response = await axios.get('https://localhost:7126/api/Proyecto/activos');
                 setCliente(response.data);
-                console.log(response.data.nombre)
+                console.log(response.data)
             } catch (error) {
                 console.error('Error al obtener clientes:', error);
             }
@@ -82,10 +81,8 @@ function FormComponent(){
     const handleEtapaChange = (event) => {
         const selectedEtapaId = event.target.value;
     
-        // Buscar el cliente seleccionado en la lista
         const selectedEtapa = etapa.find(c => c.etapasId === parseInt(selectedEtapaId));
         
-        // Verificar si se encontró el cliente
         if (selectedEtapa) {
             setSelectedEtapa(selectedEtapa);
             
@@ -142,10 +139,8 @@ function FormComponent(){
     const handleTypeChange = (event) => {
         const selectedTipoId = event.target.value;
     
-        // Buscar el cliente seleccionado en la lista
         const selectedTipo = codigo.find(t => t.typeId === parseInt(selectedTipoId));
     
-        // Verificar si se encontró el cliente
         if (selectedTipo) {
             setSelectedCodigo(selectedTipo);
             
@@ -181,17 +176,16 @@ function FormComponent(){
                 setSelectedCodigo(proyecto.codigo);
                 setNomProyecto(proyecto.nombreProyecto);
                 const clienteString = Array.isArray(proyecto.cliente) ? proyecto.cliente[0] : proyecto.cliente;
-                setSelectedCliente(proyecto.cliente);
+                setSelectedCliente(clienteString);
                 console.log('Cliente después de set:', clienteString)
                 setPrioridad(proyecto.prioridad);
                 setSelectedEstado(proyecto.estado);
-                setDiaInicio(moment(proyecto.diaInicio).format('DD-MM-YYYY'));
-                setDiaFin(proyecto.diaFin);
+                setDiaInicio(moment(proyecto.diaInicio).format('YYYY-MM-DD'));
+                setDiaFin(moment(proyecto.diaFin).format('YYYY-MM-DD'));
                 setLiderProyecto(proyecto.liderProyecto);
                 setSelectedEtapa(proyecto.etapa);
                 setSelectedUnidad(proyecto.categorias);
                 setComentarios(proyecto.comentarios);
-        
             }else{
                 Load()
             }
@@ -204,7 +198,7 @@ function FormComponent(){
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('https://localhost:7077/api/Proyecto/unidades-negocio');
+                const response = await axios.get('https://localhost:7126/api/Proyecto/unidades-negocio');
                 setUnidadesNegocio(response.data);
                 console.log(selectedUnidad)
             } catch (error) {
@@ -218,13 +212,11 @@ function FormComponent(){
     const handleUnidadChange = (event) => {
         const selectedUnidadId = event.target.value;
     
-        // Buscar la unidad seleccionada en la lista
         const selectedUnidad = unidadesNegocio.find(unidad => unidad.unidadId === parseInt(selectedUnidadId));
     
-        // Verificar si se encontró la unidad
         if (selectedUnidad) {
             setSelectedUnidad(selectedUnidad);
-            setSelectedArea(''); // Limpiar el área seleccionada al cambiar la unidad
+            setSelectedArea(''); 
             console.log(`Unidad seleccionada: ${JSON.stringify(selectedUnidad)}`);
         } else {
             console.log(`No se encontró una unidad con el ID: ${selectedUnidadId}`);
@@ -300,21 +292,20 @@ function FormComponent(){
     async function UpdateProyecto(event) {
         event.preventDefault();
             try {
-            // Encontrar el proyecto por ID
             const proyecto = proyectos.find((u) => u.id === parseInt(urlId));
         
-            // Verificar si el proyecto existe antes de intentar actualizar
             if (proyecto) {
                 await axios.patch(
-                `https://localhost:7077/api/Proyecto/UpdateProyecto/${proyecto.id}`,
+                `https://localhost:7126/api/Proyecto/UpdateProyecto/${proyecto.id}`,
                 {
+                    id: proyecto.id,
                     codigo: codigoGenerado,
                     nombreProyecto: nomProyecto,
                     cliente: selectedCliente.nombre,
                     prioridad: prioridad,
                     estado: selectedEstado.nombreEstado,
-                    diaInicio: dia_inicio,
-                    diaFin: dia_fin,
+                    diaInicio: moment(dia_inicio).format('YYYY-MM-DD'),
+                    diaFin:  moment(dia_fin).format('YYYY-MM-DD'),
                     etapa: selectedEtapa.nombreEtapa,
                     liderProyecto: liderProyecto,
                     categorias: selectedUnidad.nombreUnidad,
@@ -346,7 +337,6 @@ function FormComponent(){
     }
 
     const handleVolver = () => {
-        // Utiliza la función goBack() para retroceder una página en la historia del navegador.
         navigate('/proyectoCrud');
     };
 
@@ -391,11 +381,13 @@ function FormComponent(){
                     </div>
                     <div class="col-md-4">
                         <label className='p-2'>Cliente</label>
-                        <select onChange={handleClienteChange} type="text" class="form-control" value={cliente}
+                        
+                        <select onChange={handleClienteChange } type="text" class="form-control" 
                         >
+                            
                             <option value="">Selecciona un cliente</option>
                             {Array.isArray(cliente) && cliente.map(cliente => (
-                            <option key={cliente.clienteId} value={cliente.clienteId === cliente ? 'selected' : ''} >
+                            <option key={cliente.clienteId} value={cliente.clienteId} >
                                 {cliente.nombre}
                             </option>
                             ))}
@@ -483,7 +475,7 @@ function FormComponent(){
                             type="text"
                             className="form-control"
                             onChange={handleUnidadChange}
-                            value={selectedUnidad}
+                            value={selectedUnidad?.unidadId}
                         >
                             <option value="">Selecciona una unidad de negocio</option>
                             {Array.isArray(unidadesNegocio) && unidadesNegocio.map(unidad => (

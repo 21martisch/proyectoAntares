@@ -111,3 +111,28 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra */
     padding: 40px; /* Espaciado interno */
   }
+  .table-container {
+    overflow-x: auto; /* Permite el desplazamiento horizontal en dispositivos pequeños */
+  }
+  
+  .pagination-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+  
+  .pagination {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los botones se envuelvan en dispositivos pequeños */
+  }
+  
+  .pagination button {
+    margin-right: 5px;
+    margin-bottom: 5px; /* Espacio entre los botones en dispositivos pequeños */
+  }
+  
+  .pagination span {
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+  

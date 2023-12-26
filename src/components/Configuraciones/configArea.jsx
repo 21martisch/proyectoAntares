@@ -33,7 +33,6 @@ function Areas() {
 
     const agregarNuevaArea = async () => {
         try {
-        // Verifica que nombreArea no esté vacío y se haya seleccionado una unidad
         if (nombreArea.trim() === '' || unidadSeleccionada === '') {
             console.log('El campo de entrada está vacío o no se ha seleccionado una unidad. No se agregará el área.');
             return;
@@ -46,10 +45,8 @@ function Areas() {
 
         console.log('Respuesta:', response.data);
 
-        // Limpia el campo de entrada después de agregar el área
         setNombreArea('');
 
-        // Deshabilita el botón después de agregar el área
         setBotonDeshabilitado4(true);
         } catch (error) {
         console.error('Error al agregar área', error);
@@ -69,16 +66,15 @@ function Areas() {
     };
 
     const handleVolver = () => {
-        // Utiliza la función goBack() para retroceder una página en la historia del navegador.
         navigate('/Config');
     };
 
     const obtenerAreas = async () => {
         try {
         const response = await axios.get('https://localhost:7126/api/Proyecto/unidades-negocio');
-        setUnidadesNegocio(response.data); // Todas las unidades
+        setUnidadesNegocio(response.data); 
         const unidadesConAreas = response.data.filter((unidad) => unidad.areas.length > 0);
-        setUnidadesConAreas(unidadesConAreas); // Unidades con al menos un área
+        setUnidadesConAreas(unidadesConAreas); 
         } catch (error) {
         console.error('Error al obtener unidades', error);
         }
@@ -133,7 +129,6 @@ function Areas() {
             <thead>
                 <tr>
                 <th>Nombre</th>
-                <th>Editar</th>
                 </tr>
             </thead>
             <tbody>

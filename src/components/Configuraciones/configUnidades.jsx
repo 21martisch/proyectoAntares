@@ -29,7 +29,6 @@ function Unidades(){
     };
     const agregarNuevaUnidad = async () => {
             try {
-            // Verifica que nombreEtapa no esté vacío antes de hacer la solicitud
             if (nombreUnidad.trim() === '') {
                 console.log('El campo de entrada está vacío. No se agregará la unidad.');
                 return;
@@ -42,10 +41,8 @@ function Unidades(){
         
             console.log('Respuesta:', response.data);
         
-            // Limpia el campo de entrada después de agregar la etapa
             setNombreUnidad('');
         
-            // Deshabilita el botón después de agregar la etapa
             setBotonDeshabilitado3(true);
             } catch (error) {
             console.error('Error al agregar etapa', error);
@@ -55,11 +52,9 @@ function Unidades(){
     const nuevoValor = event.target.value;
     setNombreUnidad(nuevoValor);
 
-    // Habilita el botón si hay algo en el campo de entrada, de lo contrario, deshabilítalo
     setBotonDeshabilitado3(!nuevoValor.trim());
     };
     const handleVolver = () => {
-        // Utiliza la función goBack() para retroceder una página en la historia del navegador.
         navigate('/Config');
     };
     const obtenerUnidades = async () => {
