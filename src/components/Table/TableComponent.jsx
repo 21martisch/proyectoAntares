@@ -189,7 +189,7 @@ const TableComponent = ({ proyectos, editProyecto, Delete, filtro }) => {
                 <div className="pagination-container">
                     <div className="pagination">
                     <Button variant="light" onClick={goToFirstPage} disabled={currentPage === 1}>
-                        &lt;&lt; Primera
+                        &lt;&lt;
                     </Button>
                     <Button variant="light" onClick={goToPreviousPage} disabled={currentPage === 1}>
                         Anterior
@@ -199,7 +199,7 @@ const TableComponent = ({ proyectos, editProyecto, Delete, filtro }) => {
                         Siguiente
                     </Button>
                     <Button variant="light" onClick={goToLastPage} disabled={currentPage === Math.ceil(proyectosFiltrados.length / itemsPerPage)}>
-                        Última &gt;&gt;
+                        &gt;&gt;
                     </Button>
                     </div>
                 </div>

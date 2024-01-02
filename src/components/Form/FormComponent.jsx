@@ -13,7 +13,7 @@ function FormComponent(){
     const [codigo, setCodigo] = useState([]);
     const [selectedTipo, setSelectedCodigo] = useState('');
     const [codigoGenerado, setCodigoGenerado] = useState('');
-    const [consecutivo, setConsecutivo] = useState(1);
+    const [consecutivo, setConsecutivo] = useState(0);
     const [lastConsecutivo, setLastConsecutivo] = useState(null);
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
     const [nomProyecto, setNomProyecto] = useState("");
@@ -32,6 +32,7 @@ function FormComponent(){
     const [selectedEtapa, setSelectedEtapa] = useState('');
     const [unidadesNegocio, setUnidadesNegocio] = useState([]);
     const [selectedUnidad, setSelectedUnidad] = useState('');
+    const [selectedUnidadId, setSelectedUnidadId] = useState(null);
     const [selectedArea, setSelectedArea] = useState('');
     const [selectedAreaId, setSelectedAreaId] = useState(null); 
     
@@ -163,28 +164,68 @@ function FormComponent(){
             console.error("Error: La variable 'proyectos' no está definida o no es un array.");
         }
     };
+    const handleUnidadChange = (event) => {
+        const selectedUnidadId = event.target.value;
+    
+        const selectedUnidad = unidadesNegocio.find(unidad => unidad.unidadId === parseInt(selectedUnidadId));
+    
+        if (selectedUnidad) {
+            setSelectedUnidad(selectedUnidad);
+            setSelectedUnidadId(selectedUnidadId);
+            setSelectedArea(''); 
+            console.log(`Unidad seleccionada: ${JSON.stringify(selectedUnidad)}`);
+        } else {
+            console.log(`No se encontró una unidad con el ID: ${selectedUnidadId}`);
+        }
+    };
+
+    const handleAreaChange = (event) => {
+        const selectedAreaId = event.target.value;
+        setSelectedArea(selectedAreaId);
+        setSelectedAreaId(selectedAreaId); 
+        console.log(`Área seleccionada: ${selectedAreaId}`);
+        generarCodigo(selectedClienteId, selectedAreaId);
+        
+    };
+
     
 
     useEffect(() => {
         console.log('Efecto ejecutado');
         
             const proyecto = proyectos.find((proyecto) => proyecto.id === parseInt(urlId));
-            const cliente = selectedCliente;
-            console.log(cliente)
             if (proyecto) {
                 console.log(proyecto)
                 setSelectedCodigo(proyecto.codigo);
                 setNomProyecto(proyecto.nombreProyecto);
                 const clienteString = Array.isArray(proyecto.cliente) ? proyecto.cliente[0] : proyecto.cliente;
-                setSelectedCliente(clienteString);
+                const selectedCliente = Array.isArray(proyecto.cliente) ? proyecto.cliente[0] : cliente.find(c => c.nombre === clienteString);
+                setSelectedCliente(selectedCliente);
                 console.log('Cliente después de set:', clienteString)
                 setPrioridad(proyecto.prioridad);
-                setSelectedEstado(proyecto.estado);
+                const estadoString = Array.isArray(proyecto.estado) ? proyecto.estado[0] : proyecto.estado;
+                const selectedEstado = Array.isArray(proyecto.estado) ? proyecto.estado[0] : estado.find(est => est.nombreEstado === estadoString);
+                setSelectedEstado(selectedEstado);
                 setDiaInicio(moment(proyecto.diaInicio).format('YYYY-MM-DD'));
                 setDiaFin(moment(proyecto.diaFin).format('YYYY-MM-DD'));
                 setLiderProyecto(proyecto.liderProyecto);
-                setSelectedEtapa(proyecto.etapa);
-                setSelectedUnidad(proyecto.categorias);
+                const etapaString = Array.isArray(proyecto.etapa) ? proyecto.etapa[0] : proyecto.etapa;
+                const selectedEtapa = Array.isArray(proyecto.etapa) ? proyecto.etapa[0] : etapa.find(e => e.nombreEtapa === etapaString);
+                setSelectedEtapa(selectedEtapa);
+                const unidadString = Array.isArray(proyecto.unidadesNegocio) ? proyecto.unidadesNegocio[0] : proyecto.unidadesNegocio;
+                const selectedUnidad = Array.isArray(proyecto.unidadesNegocio)
+                    ? proyecto.unidadesNegocio.find(
+                        unidad =>
+                            unidad.unidadId === selectedUnidadId &&
+                            (!selectedArea || unidad.areas.some(area => area.areaId === selectedArea))
+                        )
+                    : unidadesNegocio.find(
+                        unidad =>
+                            unidad.unidadId === selectedUnidadId &&
+                            (!selectedArea || unidad.areas.some(area => area.areaId === selectedArea))
+                        );
+                setSelectedUnidad(selectedUnidad);
+                console.log(unidadString)
                 setComentarios(proyecto.comentarios);
             }else{
                 Load()
@@ -209,29 +250,7 @@ function FormComponent(){
         fetchData();
     }, []);
 
-    const handleUnidadChange = (event) => {
-        const selectedUnidadId = event.target.value;
     
-        const selectedUnidad = unidadesNegocio.find(unidad => unidad.unidadId === parseInt(selectedUnidadId));
-    
-        if (selectedUnidad) {
-            setSelectedUnidad(selectedUnidad);
-            setSelectedArea(''); 
-            console.log(`Unidad seleccionada: ${JSON.stringify(selectedUnidad)}`);
-        } else {
-            console.log(`No se encontró una unidad con el ID: ${selectedUnidadId}`);
-        }
-    };
-
-    const handleAreaChange = (event) => {
-        const selectedAreaId = event.target.value;
-        setSelectedArea(selectedAreaId);
-        setSelectedAreaId(selectedAreaId); 
-        console.log(`Área seleccionada: ${selectedAreaId}`);
-        generarCodigo(selectedClienteId, selectedAreaId);
-        
-    };
-
 
     async function Load() {
         const result = await axios.get(
@@ -382,7 +401,7 @@ function FormComponent(){
                     <div class="col-md-4">
                         <label className='p-2'>Cliente</label>
                         
-                        <select onChange={handleClienteChange } type="text" class="form-control" 
+                        <select onChange={handleClienteChange } type="text" class="form-control"  value={selectedCliente ? selectedCliente.clienteId : ""}
                         >
                             
                             <option value="">Selecciona un cliente</option>
@@ -432,7 +451,7 @@ function FormComponent(){
                     </div>
                     <div class="col-md-4 ">
                         <label className='p-2'>Estado</label>
-                        <select onChange={handleEstadoChange} type="text" class="form-control"  >
+                        <select onChange={handleEstadoChange} type="text" class="form-control" value={selectedEstado ? selectedEstado.estadoId : ""} >
                             <option value="">Selecciona un estado</option>
                             {Array.isArray(estado) && estado.map(e => (
                             <option key={e.estadoId} value={e.estadoId}>
@@ -456,7 +475,7 @@ function FormComponent(){
                     </div>
                     <div class="col-md-4 ">
                         <label className='p-2'>Etapas</label>
-                        <select onChange={handleEtapaChange} type="text" class="form-control" >
+                        <select onChange={handleEtapaChange} type="text" class="form-control" value={selectedEtapa ? selectedEtapa.etapasId : ""}>
                             <option value="">Selecciona una etapa</option>
                             {Array.isArray(etapa) && etapa.map(etapa => (
                             <option key={etapa.etapasId} value={etapa.etapasId}>
@@ -475,7 +494,7 @@ function FormComponent(){
                             type="text"
                             className="form-control"
                             onChange={handleUnidadChange}
-                            value={selectedUnidad?.unidadId}
+                            value={selectedUnidadId}
                         >
                             <option value="">Selecciona una unidad de negocio</option>
                             {Array.isArray(unidadesNegocio) && unidadesNegocio.map(unidad => (
